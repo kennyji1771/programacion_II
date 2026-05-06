@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Fundamentos Esenciales de la Programación · UNEXCA</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%231e3a8a'/%3E%3Cpath fill='%2300ff9d' d='M50 25 L65 45 L55 45 L55 65 L45 65 L45 45 L35 45 Z'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #eef2ff;
+            color: #0b1e33;
+            line-height: 1.5;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        body.dark-mode .sidebar,
+        body.dark-mode .content-area,
+        body.dark-mode .intro-block,
+        body.dark-mode .header {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        body.dark-mode .badge-item {
+            background: #334155;
+            color: #e2e8f0;
+        }
+        body.dark-mode .tree .tema-item:hover {
+            background: #334155;
+        }
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background: #0f172a;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+        .header {
+            background: linear-gradient(135deg, #0f2b4b, #1e4b6a, #00b4d8);
+            border-radius: 2rem 2rem 1rem 1rem;
+            padding: 2rem 2rem 1.5rem;
+            margin-bottom: 2.5rem;
+            color: white;
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.2);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #fff, #a0f0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo span {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #bfdbfe;
+            display: block;
+        }
+        .nav {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .nav a, .nav button {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 3rem;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .nav a:hover, .nav button:hover {
+            background: #ffffff;
+            color: #0f2b4b;
+            border-color: white;
+        }
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 1.5rem;
+            background: #1e4b6a;
+            color: white;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            z-index: 100;
+            transition: 0.2s;
+            border: 2px solid white;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+        .scroll-top:hover {
+            background: #00b4d8;
+            transform: scale(1.05);
+        }
+        .main-layout {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+        }
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            height: fit-content;
+            transition: background 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .content-area {
+            flex: 1;
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: background 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .tree {
+            list-style: none;
+            padding-left: 0;
+        }
+        .tree li {
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .tree details {
+            margin-left: 0.5rem;
+        }
+        .tree summary {
+            font-weight: 600;
+            color: #1e4b6a;
+            cursor: pointer;
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tree summary:hover {
+            color: #00b4d8;
+        }
+        .tree .tema-item {
+            padding-left: 1.8rem;
+            margin: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .tree .tema-item.completado {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .tree .tema-item:hover {
+            background: #eef2ff;
+            border-radius: 1rem;
+        }
+        .completado-badge {
+            font-size: 0.8rem;
+            color: #10b981;
+        }
+        .btn-completar {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: 0.2s;
+        }
+        .btn-completar:hover {
+            background: #059669;
+        }
+        .footer-note {
+            text-align: center;
+            color: inherit;
+            opacity: 0.8;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.2);
+            z-index: 200;
+            transition: left 0.3s ease;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .drawer.open {
+            left: 0;
+        }
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 199;
+            display: none;
+        }
+        .drawer-overlay.open {
+            display: block;
+        }
+        .drawer h3 {
+            border-bottom: 2px solid #1e4b6a;
+            padding-bottom: 0.5rem;
+        }
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            align-self: flex-end;
+            color: inherit;
+        }
+        .arbol-resumen {
+            background: #f0f9f4;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            margin: 1rem 0;
+            color: #0b1e33;
+        }
+        body.dark-mode .arbol-resumen {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        @media (max-width: 800px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+        .toast-success {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .content-area {
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 2rem;
+            max-width: 90%;
+            width: 500px;
+            padding: 2rem;
+            position: relative;
+            text-align: center;
+        }
+        body.dark-mode .modal-content {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'});"><i class="fas fa-arrow-up"></i></div>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1><i class="fas fa-code"></i> Fundamentos Esenciales de la Programación </h1>
+                <span>UNEXCA · Trabajo académico · 19 de abril 2026</span>
+            </div>
+            <nav class="nav">
+                <button id="infoBtn"><i class="fas fa-graduation-cap"></i> 📋 Datos del trabajo</button>
+                <button id="profileBtn"><i class="fas fa-user-circle"></i> Mi progreso</button>
+                <button id="darkModeToggle"><i class="fas fa-moon"></i> Modo oscuro</button>
+                <a href="#inicio"><i class="fas fa-rocket"></i> Inicio</a>
+                <a href="#contenido"><i class="fas fa-book-open"></i> Contenido</a>
+            </nav>
+        </header>
+
+        <div id="contenidoPrincipal">
+            <div class="main-layout">
+                <div class="sidebar">
+                    <h3><i class="fas fa-sitemap"></i> Índice de conceptos</h3>
+                    <div id="arbolNavegacion"></div>
+                </div>
+                <div class="content-area">
+                    <div id="contenidoTema"></div>
+                    <button id="btnCompletarTema" class="btn-completar" style="display: none;">✓ Marcar como aprendido</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-note">⚡ Ensayo técnico · 10 conceptos clave para dominar el desarrollo web moderno</div>
+    </div>
+
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer" id="profileDrawer">
+        <button class="close-drawer" id="closeDrawerBtn">&times;</button>
+        <h3><i class="fas fa-user-graduate"></i> Mi avance</h3>
+        <div class="user-info">
+            <p><i class="fas fa-chart-line"></i> <strong>Progreso total:</strong> <span id="progresoStats">0%</span></p>
+            <p><i class="fas fa-check-circle"></i> <strong>Conceptos estudiados:</strong> <span id="temasCompletados">0</span> / <span id="totalTemas">0</span></p>
+        </div>
+        <hr>
+        <p style="font-size:0.85rem; margin-top:1rem;"><i class="fas fa-database"></i> El progreso se guarda automáticamente.</p>
+    </div>
+
+    <!-- Modal de información institucional -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeInfoModal">&times;</span>
+            <i class="fas fa-university" style="font-size: 3rem; color: #1e4b6a;"></i>
+            <h2>UNEXCA</h2>
+            <p><strong>Universidad Nacional Experimental de la Gran Caracas</strong></p>
+            <hr>
+            <p><i class="fas fa-user"></i> <strong>Estudiante:</strong> Gerard Sieveres</p>
+            <p><i class="fas fa-id-card"></i> <strong>Cédula:</strong> 10849867</p>
+            <p><i class="fas fa-chalkboard-teacher"></i> <strong>Profesor:</strong> Ing. Néstor Lares</p>
+            <p><i class="fas fa-calendar-alt"></i> <strong>Fecha:</strong> 19 de abril de 2026</p>
+            <p><i class="fas fa-laptop-code"></i> <strong>Trabajo:</strong> Fundamentos Esenciales de la Programación </p>
+        </div>
+    </div>
+
+    <div id="toast" class="toast-success" style="display: none;"><i class="fas fa-check-circle"></i> <span id="toastMsg"></span></div>
+
+    <script>
+        // ======================== ESTRUCTURA DEL CURSO ========================
+        const estructuraGlobal = {
+            "titulo": "Fundamentos Esenciales de la Programación",
+            "autor": "Servicio de investigación técnica",
+            "trayectos": [
+                {
+                    "id": "trayecto_unico",
+                    "titulo": "Conceptos fundamentales",
+                    "semestres": [
+                        {
+                            "id": "semestre_unico",
+                            "titulo": "Diez pilares de la programación",
+                            "filosofia": "De Ada Lovelace a los frameworks modernos",
+                            "clases": [
+                                {
+                                    "id": "clase_conceptos",
+                                    "titulo": "Conceptos clave (1-10)",
+                                    "descripcion": "Historia, definiciones, tecnologías y lenguajes actuales.",
+                                    "archivos": [],
+                                    "temas": [
+                                        {
+                                            "id": "c1",
+                                            "titulo": "1. Historia de la programación y tipos de programación",
+                                            "contenido": {
+                                                "texto": "La programación comenzó en 1843 con Ada Lovelace. Hitos importantes: FORTRAN (1957), C (1972), y en 1995 surgieron Java, JavaScript y PHP. Desde 2010 destacan Rust, Go y TypeScript. Los principales paradigmas son: imperativa (C), orientada a objetos (Java), funcional (Haskell), declarativa (SQL), lógica (Prolog) y event‑driven (JavaScript)."
+                                            },
+                                            "consideraciones": [
+                                                "Ada Lovelace es reconocida como la primera programadora de la historia.",
+                                                "Cada paradigma resuelve problemas de manera distinta.",
+                                                "JavaScript nació en 1995 y hoy es omnipresente."
+                                            ],
+                                            "resumenArbol": "HISTORIA Y TIPOS DE PROGRAMACIÓN\n│\n├── Hitos históricos clave\n│   ├── 1843 – Ada Lovelace (primer algoritmo)\n│   ├── 1957 – FORTRAN\n│   ├── 1972 – C\n│   ├── 1995 – Java, JavaScript, PHP\n│   └── 2010+ – Rust, TypeScript, Go\n│\n└── Tipos por paradigma\n    ├── Imperativa (C, Pascal)\n    ├── Orientada a objetos (Java, C++, Python)\n    ├── Funcional (Haskell, JS parcial)\n    ├── Declarativa (SQL, HTML)\n    ├── Lógica (Prolog)\n    └── Event-driven (JavaScript, Node.js)"
+                                        },
+                                        {
+                                            "id": "c2",
+                                            "titulo": "2. ¿Qué es la programación?",
+                                            "contenido": {
+                                                "texto": "La programación es el proceso de diseñar, escribir, probar y mantener un conjunto de instrucciones (código) que una computadora ejecuta. Su propósito principal es resolver problemas, automatizar tareas y crear software (web, móvil, sistemas)."
+                                            },
+                                            "consideraciones": [
+                                                "Es la base de toda aplicación digital.",
+                                                "Implica lógica, creatividad y estructura."
+                                            ],
+                                            "resumenArbol": "QUÉ ES LA PROGRAMACIÓN\n│\n├── Definición\n│   └── Diseñar, escribir y mantener instrucciones (código) que una computadora ejecuta\n│\n└── Propósito\n    ├── Resolver problemas\n    ├── Automatizar tareas\n    └── Crear software (web, móvil, sistemas)"
+                                        },
+                                        {
+                                            "id": "c3",
+                                            "titulo": "3. Definición formal y puntos clave",
+                                            "contenido": {
+                                                "texto": "La programación se define como la traducción de algoritmos a un lenguaje formal (código fuente) que luego se compila o interpreta a código máquina. Sus puntos clave son: algoritmo, lenguaje de programación, compilación/interpretación, depuración, mantenibilidad y estructuras de datos y control (variables, bucles, condicionales)."
+                                            },
+                                            "consideraciones": [
+                                                "Un buen código es legible y mantenible.",
+                                                "La depuración es parte esencial del desarrollo."
+                                            ],
+                                            "resumenArbol": "DEFINICIÓN Y PUNTOS CLAVE\n│\n├── Definición formal\n│   └── Traducción de algoritmos a un lenguaje formal → código máquina\n│\n└── Puntos clave\n    ├── Algoritmo (pasos lógicos)\n    ├── Lenguaje de programación (sintaxis)\n    ├── Compilación / interpretación\n    ├── Depuración (eliminar errores)\n    ├── Mantenibilidad (código legible)\n    └── Estructuras de datos y control (variables, bucles, condicionales)"
+                                        },
+                                        {
+                                            "id": "c4",
+                                            "titulo": "4. ¿Cómo funcionan PHP y MySQL juntos?",
+                                            "contenido": {
+                                                "texto": "PHP es un lenguaje del lado del servidor que genera HTML dinámico. MySQL es una base de datos relacional. El flujo típico: 1) El navegador pide un archivo .php; 2) PHP se conecta a MySQL (ej. mysqli_connect); 3) PHP envía consultas SQL (SELECT, INSERT); 4) MySQL procesa y devuelve resultados; 5) PHP formatea los datos en HTML y los envía al navegador."
+                                            },
+                                            "consideraciones": [
+                                                "PHP + MySQL es la base del stack LAMP.",
+                                                "La conexión segura es fundamental (evitar inyección SQL)."
+                                            ],
+                                            "resumenArbol": "FUNCIONAMIENTO PHP + MYSQL\n│\n├── PHP (servidor)\n│   └── Genera HTML dinámico, se conecta a MySQL\n│\n├── MySQL (base de datos)\n│   └── Almacena y responde consultas SQL\n│\n└── Flujo típico\n    ├── 1. Navegador pide .php\n    ├── 2. PHP se conecta a MySQL (mysqli_connect)\n    ├── 3. PHP envía SQL (SELECT, INSERT)\n    ├── 4. MySQL procesa y devuelve resultados\n    └── 5. PHP formatea resultados en HTML y los envía"
+                                        },
+                                        {
+                                            "id": "c5",
+                                            "titulo": "5. SQL, MySQL y PostgreSQL",
+                                            "contenido": {
+                                                "texto": "SQL (Structured Query Language) es un lenguaje declarativo para gestionar bases de datos relacionales. MySQL es un RDBMS (Relational Database Management System) open source rápido y simple, muy usado en hosting compartido (LAMP). PostgreSQL es otro RDBMS open source más avanzado, con mayor cumplimiento de estándares SQL, transacciones ACID y soporte para tipos de datos complejos como JSONB y PostGIS."
+                                            },
+                                            "consideraciones": [
+                                                "SQL es el lenguaje estándar para bases de datos relacionales.",
+                                                "PostgreSQL es ideal para aplicaciones que requieren integridad y datos complejos."
+                                            ],
+                                            "resumenArbol": "SQL, MYSQL Y POSTGRESQL\n│\n├── SQL (Structured Query Language)\n│   └── Lenguaje declarativo para gestionar bases de datos relacionales\n│\n├── MySQL\n│   ├── RDBMS open source\n│   ├── Rápido, simple\n│   └── Muy usado en hosting compartido (LAMP)\n│\n└── PostgreSQL\n    ├── RDBMS open source avanzado\n    ├── Cumple más estándares SQL\n    ├── Transacciones ACID\n    └── Tipos de datos complejos (JSONB, arrays, PostGIS)"
+                                        },
+                                        {
+                                            "id": "c6",
+                                            "titulo": "6. ¿Cuándo surgió JavaScript?",
+                                            "contenido": {
+                                                "texto": "JavaScript surgió en 1995, creado por Brendan Eich en Netscape. Inicialmente se llamó Mocha, luego LiveScript y finalmente JavaScript. Fue estandarizado como ECMAScript (ES1 en 1997). La versión moderna de referencia es ES6 (2015) y las posteriores."
+                                            },
+                                            "consideraciones": [
+                                                "JavaScript fue creado en solo 10 días.",
+                                                "ES6 trajo clases, arrow functions, let/const y promesas."
+                                            ],
+                                            "resumenArbol": "SURGIMIENTO DE JAVASCRIPT\n│\n├── Año: 1995\n├── Creador: Brendan Eich (Netscape)\n├── Nombres previos: Mocha → LiveScript → JavaScript\n├── Estandarización: ECMAScript (ES1 en 1997)\n└── Versión moderna: ES6 (2015) y posteriores"
+                                        },
+                                        {
+                                            "id": "c7",
+                                            "titulo": "7. Características principales de JavaScript",
+                                            "contenido": {
+                                                "texto": "JavaScript es interpretado (no requiere compilación previa), de tipado dinámico, orientado a prototipos (aunque admite clases desde ES6). Tiene funciones de primera clase, asincronía nativa (callbacks, promesas, async/await, event loop), se ejecuta tanto en el cliente (navegador) como en el servidor (Node.js), es multiparadigma y puede manipular el DOM."
+                                            },
+                                            "consideraciones": [
+                                                "El tipado dinámico permite flexibilidad pero puede generar errores.",
+                                                "Node.js permite usar JS en el backend."
+                                            ],
+                                            "resumenArbol": "CARACTERÍSTICAS DE JAVASCRIPT\n│\n├── Interpretado (no requiere compilación previa)\n├── Tipado dinámico\n├── Orientado a prototipos (clases desde ES6)\n├── Funciones de primera clase\n├── Asincronía nativa (callbacks, promesas, async/await, event loop)\n├── Ejecución en cliente (navegador) y servidor (Node.js)\n├── Multiparadigma (imperativo, funcional, eventos)\n└── Manipulación del DOM (HTML/CSS dinámico)"
+                                        },
+                                        {
+                                            "id": "c8",
+                                            "titulo": "8. ¿Para qué sirve JavaScript?",
+                                            "contenido": {
+                                                "texto": "JavaScript sirve para: dar interactividad a las páginas web (clics, teclado, ratón); validar formularios antes de enviarlos; actualizar contenido sin recargar la página (AJAX/Fetch); crear animaciones; almacenar datos localmente (localStorage); construir Single Page Applications (SPA) con frameworks como React; desarrollar backend con Node.js (servidores, APIs, bases de datos); y automatizar tareas (build tools, web scraping)."
+                                            },
+                                            "consideraciones": [
+                                                "Es el único lenguaje nativo del navegador.",
+                                                "Node.js ha llevado JS a servidores, IoT y escritorio."
+                                            ],
+                                            "resumenArbol": "PARA QUÉ SIRVE JAVASCRIPT\n│\n├── Interactividad (clics, teclado, ratón)\n├── Validación de formularios (antes de enviar)\n├── Actualización dinámica (AJAX / Fetch) sin recargar\n├── Animaciones y efectos visuales\n├── Almacenamiento local (localStorage, sessionStorage)\n├── Single Page Applications (React, Angular, Vue)\n├── Backend con Node.js (servidores, APIs, BBDD)\n└── Automatización (build tools, web scraping, bots)"
+                                        },
+                                        {
+                                            "id": "c9",
+                                            "titulo": "9. Librerías y frameworks de JavaScript más utilizados",
+                                            "contenido": {
+                                                "texto": "Librerías: jQuery (manipulación DOM), Lodash (utilidades), D3.js (visualización de datos), Three.js (gráficos 3D). Frameworks: React (SPA, componentes, Facebook), Vue.js (progresivo y fácil), Angular (empresarial, Google), Svelte (compila a DOM nativo), Next.js (SSR sobre React), Nuxt.js (SSR sobre Vue)."
+                                            },
+                                            "consideraciones": [
+                                                "React es el más popular para aplicaciones modernas.",
+                                                "Next.js y Nuxt.js facilitan el renderizado en servidor (SEO)."
+                                            ],
+                                            "resumenArbol": "LIBRERÍAS Y FRAMEWORKS JS\n│\n├── Librerías\n│   ├── jQuery (manipulación DOM, simplificación)\n│   ├── Lodash (utilidades funcionales)\n│   ├── D3.js (visualización de datos)\n│   └── Three.js (gráficos 3D)\n│\n└── Frameworks\n    ├── React (SPA, componentes – Facebook)\n    ├── Vue.js (progresivo, fácil)\n    ├── Angular (empresarial – Google)\n    ├── Svelte (compila a DOM nativo)\n    ├── Next.js (SSR sobre React)\n    └── Nuxt.js (SSR sobre Vue)"
+                                        },
+                                        {
+                                            "id": "c10",
+                                            "titulo": "10. Lenguajes más usados actualmente (2025-2026)",
+                                            "contenido": {
+                                                "texto": "Python: alto nivel, tipado dinámico, ideal para ciencia de datos, IA y backend. JavaScript: web frontend y backend. Java: orientado a objetos, JVM, backend empresarial y Android. C#: ecosistema .NET, Windows, Unity. C/C++: sistemas, embebidos, videojuegos. TypeScript: superset tipado de JavaScript. Go: compilado, concurrente, microservicios. Rust: seguridad de memoria, sistemas críticos. PHP: servidor web, WordPress, Laravel. SQL: declarativo para bases de datos relacionales."
+                                            },
+                                            "consideraciones": [
+                                                "Python y JavaScript lideran en popularidad.",
+                                                "Rust crece por su seguridad y rendimiento."
+                                            ],
+                                            "resumenArbol": "LENGUAJES MÁS USADOS (2025-26)\n│\n├── Python – Alto nivel, tipado dinámico. Ciencia de datos, IA, backend.\n├── JavaScript – Web frontend y backend (Node.js). Interactividad.\n├── Java – Orientado a objetos, JVM. Backend empresarial, Android.\n├── C# – Ecosistema .NET. Windows, Unity, backend.\n├── C / C++ – Sistemas, embebidos (C); videojuegos, rendimiento (C++).\n├── TypeScript – Superset tipado de JavaScript. Frontend/backend moderno.\n├── Go (Golang) – Compilado, concurrente. Microservicios.\n├── Rust – Seguridad de memoria. Sistemas críticos, WebAssembly.\n├── PHP – Servidor web. WordPress, Laravel, hosting compartido.\n└── SQL – Declarativo para bases de datos relacionales (indispensable)."
+                                        },
+                                        {
+                                            "id": "conclusion",
+                                            "titulo": "Conclusión",
+                                            "contenido": {
+                                                "texto": "La programación se sustenta en una combinación de lenguajes, paradigmas y herramientas que han evolucionado durante décadas. Desde los primeros algoritmos de Ada Lovelace hasta los modernos frameworks de JavaScript, cada concepto cumple un rol específico en la creación de aplicaciones funcionales, interactivas y eficientes. El uso de representaciones visuales jerárquicas facilita la comprensión de estas relaciones. Dominar estos diez pilares es el primer paso para desenvolverse con soltura en el desarrollo web actual."
+                                            },
+                                            "consideraciones": [
+                                                "La evolución continúa: WebAssembly, IA, edge computing.",
+                                                "La base conceptual aprendida aquí es atemporal."
+                                            ],
+                                            "resumenArbol": "CONCLUSIÓN\n│\n├── La programación combina lenguajes, paradigmas y herramientas\n├── Evolución desde Ada Lovelace hasta frameworks modernos\n├── Los diagramas jerárquicos facilitan el aprendizaje\n└── Dominar estos 10 pilares es esencial para el desarrollo web actual"
+                                        },
+                                        {
+                                            "id": "bibliografia",
+                                            "titulo": "Bibliografía",
+                                            "contenido": {
+                                                "texto": "Eich, B. (1995). JavaScript: diseño e implementación inicial. Netscape Communications.\n\nISO/IEC. (1997). ECMAScript Language Specification (ES1).\n\nOracle Corporation. (2023). Java: historia y aplicaciones empresariales.\n\nThe PHP Group. (2024). PHP Manual: Conexión a bases de datos MySQL.\n\nPostgreSQL Global Development Group. (2025). PostgreSQL 16: características avanzadas.\n\nStack Overflow. (2026). Encuesta anual de desarrolladores 2026.\n\nW3Schools. (2025). Tutoriales de SQL, JavaScript, React y Node.js."
+                                            },
+                                            "consideraciones": [
+                                                "Consultar fuentes actualizadas para mantenerse al día.",
+                                                "La documentación oficial es el mejor recurso."
+                                            ],
+                                            "resumenArbol": "BIBLIOGRAFÍA\n│\n├── Eich, B. (1995) – JavaScript\n├── ISO/IEC (1997) – ECMAScript\n├── Oracle (2023) – Java empresarial\n├── The PHP Group (2024) – PHP + MySQL\n├── PostgreSQL Global Development Group (2025)\n├── Stack Overflow Survey (2026)\n└── W3Schools (2025) – SQL, JS, React, Node.js"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // ======================== LÓGICA DE APLICACIÓN ========================
+        let progresoUsuario = {};
+        let temaSeleccionado = null;
+
+        function mostrarToast(mensaje) {
+            const toast = document.getElementById('toast');
+            const msgSpan = document.getElementById('toastMsg');
+            msgSpan.innerText = mensaje;
+            toast.style.display = 'flex';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        function actualizarEstadisticas() {
+            const total = document.querySelectorAll('.tema-item').length;
+            const completados = Object.keys(progresoUsuario).length;
+            const porcentaje = total ? Math.round((completados / total) * 100) : 0;
+            document.getElementById('progresoStats').innerText = `${porcentaje}%`;
+            document.getElementById('temasCompletados').innerText = completados;
+            document.getElementById('totalTemas').innerText = total;
+        }
+
+        function cargarProgresoLocal() {
+            const guardado = localStorage.getItem('progreso_fundamentos');
+            progresoUsuario = guardado ? JSON.parse(guardado) : {};
+        }
+
+        function guardarProgresoLocal() {
+            localStorage.setItem('progreso_fundamentos', JSON.stringify(progresoUsuario));
+            actualizarEstadisticas();
+        }
+
+        function marcarTemaCompletado(tema, puntaje = null) {
+            if (progresoUsuario[tema.id]) {
+                mostrarToast('Ya marcado como aprendido');
+                return;
+            }
+            progresoUsuario[tema.id] = true;
+            guardarProgresoLocal();
+            mostrarToast(`¡Concepto aprendido!${puntaje !== null ? ` Puntaje: ${puntaje}%` : ''}`);
+            const liTema = document.querySelector(`.tema-item[data-tema-id="${tema.id}"]`);
+            if (liTema) {
+                liTema.querySelector('i').className = 'fas fa-check-circle completado-badge';
+                liTema.classList.add('completado');
+            }
+            document.getElementById('btnCompletarTema').style.display = 'none';
+        }
+
+        function construirArbol() {
+            const contenedor = document.getElementById('arbolNavegacion');
+            contenedor.innerHTML = '';
+            const trayecto = estructuraGlobal.trayectos[0];
+            const semestre = trayecto.semestres[0];
+            const ul = document.createElement('ul'); ul.className = 'tree';
+            const liSem = document.createElement('li');
+            const detailsSem = document.createElement('details');
+            detailsSem.open = true;
+            const summarySem = document.createElement('summary');
+            summarySem.innerHTML = `<i class="fas fa-calendar-alt"></i> ${semestre.titulo}`;
+            detailsSem.appendChild(summarySem);
+            const ulClases = document.createElement('ul');
+            semestre.clases.forEach(clase => {
+                const liClase = document.createElement('li');
+                const detailsClase = document.createElement('details');
+                detailsClase.open = true;
+                const summaryClase = document.createElement('summary');
+                summaryClase.innerHTML = `<i class="fas fa-chalkboard"></i> ${clase.titulo}`;
+                detailsClase.appendChild(summaryClase);
+                const ulTemas = document.createElement('ul');
+                clase.temas.forEach(tema => {
+                    const liTema = document.createElement('li');
+                    liTema.className = 'tema-item';
+                    liTema.setAttribute('data-tema-id', tema.id);
+                    const icon = document.createElement('i');
+                    icon.className = progresoUsuario[tema.id] ? 'fas fa-check-circle completado-badge' : 'far fa-circle';
+                    const span = document.createElement('span');
+                    span.textContent = tema.titulo;
+                    liTema.appendChild(icon);
+                    liTema.appendChild(span);
+                    liTema.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        mostrarTema(tema, clase, semestre, trayecto);
+                    });
+                    ulTemas.appendChild(liTema);
+                });
+                detailsClase.appendChild(ulTemas);
+                liClase.appendChild(detailsClase);
+                ulClases.appendChild(liClase);
+            });
+            detailsSem.appendChild(ulClases);
+            liSem.appendChild(detailsSem);
+            ul.appendChild(liSem);
+            contenedor.appendChild(ul);
+            actualizarEstadisticas();
+        }
+
+        function getPrimerTema() {
+            const trayecto = estructuraGlobal.trayectos[0];
+            const semestre = trayecto.semestres[0];
+            for (const clase of semestre.clases) {
+                if (clase.temas.length > 0) return { tema: clase.temas[0], clase, semestre, trayecto };
+            }
+            return null;
+        }
+
+        function mostrarTema(tema, clase, semestre, trayecto) {
+            temaSeleccionado = { tema, clase, semestre, trayecto };
+            const container = document.getElementById('contenidoTema');
+            const contenido = tema.contenido;
+            let html = `<h2>${tema.titulo}</h2>`;
+            if (clase.descripcion) html += `<p><em>📖 ${clase.descripcion}</em></p>`;
+            if (contenido.texto) html += `<p>${contenido.texto.replace(/\n/g, '<br>')}</p>`;
+            if (tema.consideraciones && tema.consideraciones.length > 0) {
+                html += `<h3>📌 Puntos clave</h3><ul>${tema.consideraciones.map(c => `<li>${c}</li>`).join('')}</ul>`;
+            }
+            if (tema.resumenArbol) html += `<div class="arbol-resumen"><pre>${tema.resumenArbol}</pre></div>`;
+            container.innerHTML = html;
+            const btnCompletar = document.getElementById('btnCompletarTema');
+            if (progresoUsuario[tema.id]) {
+                btnCompletar.style.display = 'none';
+            } else {
+                btnCompletar.style.display = 'block';
+                btnCompletar.onclick = () => marcarTemaCompletado(tema);
+            }
+        }
+
+        function initDarkMode() {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            if (darkMode) document.body.classList.add('dark-mode');
+            const btn = document.getElementById('darkModeToggle');
+            btn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+                btn.innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i> Modo claro' : '<i class="fas fa-moon"></i> Modo oscuro';
+            });
+            btn.innerHTML = darkMode ? '<i class="fas fa-sun"></i> Modo claro' : '<i class="fas fa-moon"></i> Modo oscuro';
+        }
+
+        function initDrawer() {
+            const profileBtn = document.getElementById('profileBtn');
+            const drawer = document.getElementById('profileDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            const closeBtn = document.getElementById('closeDrawerBtn');
+            function openDrawer() { drawer.classList.add('open'); overlay.classList.add('open'); }
+            function closeDrawer() { drawer.classList.remove('open'); overlay.classList.remove('open'); }
+            profileBtn.addEventListener('click', openDrawer);
+            closeBtn.addEventListener('click', closeDrawer);
+            overlay.addEventListener('click', closeDrawer);
+            closeDrawer();
+        }
+
+        function initModal() {
+            const infoBtn = document.getElementById('infoBtn');
+            const modal = document.getElementById('infoModal');
+            const closeBtn = document.getElementById('closeInfoModal');
+            function openModal() { modal.classList.add('active'); }
+            function closeModal() { modal.classList.remove('active'); }
+            infoBtn.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initDarkMode();
+            initDrawer();
+            initModal();
+            cargarProgresoLocal();
+            construirArbol();
+            const primerTema = getPrimerTema();
+            if (primerTema) mostrarTema(primerTema.tema, primerTema.clase, primerTema.semestre, primerTema.trayecto);
+        });
+    </script>
+</body>
+</html>
